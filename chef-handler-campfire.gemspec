@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
-$:.push File.expand_path('../lib', __FILE__)
+$:.push File.expand_path('../lib/chef/handler', __FILE__)
 require 'chef/handler'
+require 'chef-handler-campfire'
 
 Gem::Specification.new do |s|
   s.name = 'chef-handler-campfire'
