@@ -1,23 +1,51 @@
-= Campfire handler for Chef using Tinder
+Description
+===========
 
-Report chef exceptions to Campfire.
+A Chef Exception & Reporting Handler for 37signal's 
+[Campfire](http://www.campfirenow.com).
 
-Works fine with chef versions: 0.9.x and 0.10.x
+Usage
+=====
 
-== Usage
+1. Create a 37signals [Campfire](http://www.campfirenow.com) account.
+2. Retrieve your Campfire Token. URL TK
+3. Create a Campfire Room. URL TK
+4. Download the [chef_handler](http://community.opscode.com/cookbooks/chef_handler)
+Cookbook.
+5. Given you've retrieved your Campfire Token as **TOKEN**, your Room ID as 
+**ROOM** and Subdomain as **SUBDOMAIN**, add a Recipe similar to the example 
+below:
 
-  gem install campfire_handler
+```ruby
+include_recipe 'chef_handler'
 
-In your chef client file (often placed at /etc/chef/client.rb) put:
+gem_package('chef-handler-campfire'){action :nothing}.run_action(:install)
 
-  require "campfire_handler"
-  exception_handlers << CampfireHandler.new(:subdomain => "your-campfire-subdomain",:token => "your-campfire-token-key")
+chef_handler 'Chef::Handler::Campfire' do
+  action :enable
+  token 'TOKEN'
+  room 'ROOM'
+  subdomain 'SUBDOMAIN'
+  source File.join(Gem.all_load_paths.grep(/chef-handler-campfire/).first,
+                   'chef', 'handler', 'campfire.rb')
+end
+```
+
+See also: [Enable Chef Handler with LWRP](http://wiki.opscode.com/display/chef/Distributing+Chef+Handlers#DistributingChefHandlers-EnabletheChefHandlerwiththe%7B%7Bchefhandler%7D%7DLWRP)
 
 
-== Contributors
-  Hat tip to Umang Chouhan (uchouhan) for the campfire gem.
+Authors
+============
+1. [Umang Chouhan](https://github.com/uchouhan) for the campfire gem.
+2. [Brain Scott](https://github.com/bscott) for the original campfire_handler gem.
+3. [Greg Albrecht](https://github.com/ampledata) for chef-handler-campfire gem.
 
-== Copyright
 
-Copyright (c) 2011 Brian Scott, See LICENSE for details.
+Copyright
+=========
+Copyright 2012 Splunk, Inc.
 
+
+License
+=======
+Apache License 2.0
