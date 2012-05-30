@@ -17,7 +17,7 @@ require 'tinder'
 class Chef
   class Handler
     class Campfire < Chef::Handler
-      VERSION = '2.0.0'
+      VERSION = '2.0.2'
 
       def initialize(subdomain, token, room)
         @subdomain = subdomain

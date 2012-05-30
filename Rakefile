@@ -1,11 +1,15 @@
-require 'bundler'
-Bundler::GemHelper.install_tasks
+# -*- encoding: utf-8 -*-
+$:.push File.expand_path('../lib/chef/handler', __FILE__)
 
-require "rake/testtask"
-Rake::TestTask.new(:test) do |test|
-  test.libs << "lib" << "test"
-  test.pattern = "test/**/*_test.rb"
-  test.verbose = true
+require 'campfire'
+
+
+task :build do
+  system 'gem build chef-handler-campfire.gemspec'
 end
 
-task :default => :test
+task :release do
+  system "gem push chef-handler-campfire-#{Chef::Handler::Campfire}.gem"
+end
+
+task :default => :build
