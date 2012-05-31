@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.homepage = 'https://github.com/ampledata/chef-handler-campfire'
   s.summary = 'Chef Exception & Reporting Handler for Campfire'
   s.description = 'Allows reporting of Chef Exceptions to Campfire Chat Rooms.'
-  s.files = %w(LICENSE README.rdoc) + Dir.glob('lib/**/*')
+  s.files = %w(LICENSE README.md) + Dir.glob('lib/**/*')
   s.require_paths = ['lib']
   s.add_runtime_dependency('tinder')
 end
