@@ -1,15 +1,15 @@
 # -*- encoding: utf-8 -*-
-$:.push File.expand_path('../lib/chef/handler', __FILE__)
+require 'aws-sdk'
+$:.unshift(File.dirname(__FILE__) + '/lib')
 
-require 'campfire'
-
+require 'chef/handler/s3'
 
 task :build do
-  system 'gem build chef-handler-campfire.gemspec'
+  system 'gem build chef-handler-s3.gemspec'
 end
 
 task :release do
-  system "gem push chef-handler-campfire-#{Chef::Handler::Campfire::VERSION}.gem"
+  system "gem push chef-handler-s3-#{Chef::Handler::S3::VERSION}.gem"
 end
 
 task :default => :build

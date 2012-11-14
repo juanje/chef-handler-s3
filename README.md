@@ -1,49 +1,58 @@
 Description
 ===========
 
-A Chef Exception & Reporting Handler for 37signal's 
-[Campfire](http://www.campfirenow.com).
+A Chef Exception & Reporting Handler for storing reports at [S3](http://aws.amazon.com/s3).
+
+The gem install a exception/report handler for Chef that create a local simplified JSON report and then upload it to a S3 bucket.
+
+This Chef Exception & Reporting Handler gem is heavily based on the [Campfire's one](https://github.com/ampledata/chef-handler-campfire) and the Chef's JsonFile handler.
 
 Usage
 =====
 
-1. Create a 37signals [Campfire](http://www.campfirenow.com) account.
-2. Retrieve your Campfire Token. URL TK
-3. Create a Campfire Room. URL TK
+1. Create a [Amazon S3](http://aws.amazon.com/s3) account.
+2. Retrieve your **ACCESS_KEY_ID** and your **SECRET_ACCESS_KEY**.
+3. Create a bucket.
 4. Download the [chef_handler](http://community.opscode.com/cookbooks/chef_handler)
 Cookbook.
-5. Given you've retrieved your Campfire Token as **TOKEN**, your Room ID as 
-**ROOM** and Subdomain as **SUBDOMAIN**, add a Recipe similar to the example 
-below:
+5. Given you've retrieved your S3 **ACCESS_KEY_ID** as `:access_key_id`, your **SECRET_ACCESS_KEY** as `:secret_access_key` and the bucket name as `:bucket_name`, add a Recipe similar to the example below:
 
 ```ruby
-include_recipe 'chef_handler'
+include_recipe "chef_handler::default"
 
-gem_package('chef-handler-campfire'){action :nothing}.run_action(:install)
+%w{libxml2-dev libxslt1-dev}.each do |pkg|
+  package pkg do
+    action :nothing
+  end.run_action(:install)
+end
 
-chef_handler 'Chef::Handler::Campfire' do
+chef_gem 'aws-sdk'
+chef_gem "chef-handler-s3"
+gem "chef-handler-s3"
+
+chef_handler 'Chef::Handler::S3' do
+  source 'chef/handler/s3'
+  arguments :access_key_id     => 'XXXXXXXXXXXXX',
+            :secret_access_key => 'XXXXXXXXXXXXX',
+            :bucket_name       => 'some_bucket_name',
+            :folder            => 'some_bucket_folder_name'
   action :enable
-  token 'TOKEN'
-  room 'ROOM'
-  subdomain 'SUBDOMAIN'
-  source File.join(Gem.all_load_paths.grep(/chef-handler-campfire/).first,
-                   'chef', 'handler', 'campfire.rb')
 end
 ```
+
+The argument `:folder` is optional. This will store the file inside of a folder with that name at the pointed bucket.
 
 See also: [Enable Chef Handler with LWRP](http://wiki.opscode.com/display/chef/Distributing+Chef+Handlers#DistributingChefHandlers-EnabletheChefHandlerwiththe%7B%7Bchefhandler%7D%7DLWRP)
 
 
 Authors
 ============
-1. [Umang Chouhan](https://github.com/uchouhan) for the campfire gem.
-2. [Brain Scott](https://github.com/bscott) for the original campfire_handler gem.
-3. [Greg Albrecht](https://github.com/ampledata) for chef-handler-campfire gem.
+1. [Juanje Ojeda](https://github.com/juanje)
 
 
 Copyright
 =========
-Copyright 2012 Splunk, Inc.
+Copyright 2012 Wantudu
 
 
 License
