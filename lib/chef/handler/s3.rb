@@ -83,6 +83,21 @@ class Chef
           }
         end
 
+        # This need to be used carefully. The values of the passed has will be evaluated
+        # It is mean to be used at the resource as following example:
+        # chef_handler "Chef::Handler::S3" do
+        #   source 'chef/handler/s3'
+        #   arguments :extra_data => {
+        #     'iptables' => %{`iptables -L -n`.split("\n")},
+        #     'route'    => %{`route -n`.split("\n")}
+        #     }
+        # end
+        if @config.include? :extra_data and @config[:extra_data].is_a? Hash
+          @config[:extra_data].each do |k,v|
+            run_data[k] = eval v
+          end
+        end
+
         savetime = Time.now.strftime("%Y%m%d%H%M%S")
         file_path = File.join(config[:path], "#{node.name}-#{savetime}.json")
         File.open(file_path, "w") do |file|
