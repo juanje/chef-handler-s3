@@ -62,7 +62,11 @@ class Chef
 
         build_report_dir
 
-        savetime = Time.now.strftime("%Y%m%d%H%M%S")
+        if node.include? :cloud
+          run_data[:ipaddress] = node.cloud.public_ipv4
+        else
+          run_data[:ipaddress] = node.ipaddress
+        end
         run_data[:name] = node.name
         run_data[:fqdn] = node.fqdn
         run_data[:success] = run_status.success?
@@ -79,12 +83,7 @@ class Chef
           }
         end
 
-        if node.include? :cloud
-          run_data[:ipaddress] = node.cloud.public_ipv4
-        else
-          run_data[:ipaddress] = node.ipaddress
-        end
-
+        savetime = Time.now.strftime("%Y%m%d%H%M%S")
         file_path = File.join(config[:path], "#{node.name}-#{savetime}.json")
         File.open(file_path, "w") do |file|
           file.puts Chef::JSONCompat.to_json_pretty(run_data)
