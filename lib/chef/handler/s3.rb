@@ -53,8 +53,7 @@ class Chef
         run_data = Hash.new
         if run_status.failed?
           Chef::Log.error("Creating JSON exception report")
-          run_data[:formatted_exception] = run_status.formatted_exception.split("\n")
-          run_data[:exception] = run_status.exception.split("\n")
+          run_data[:exception] = run_status.formatted_exception.split("\n")
           run_data[:backtrace] = run_status.backtrace
         else
           Chef::Log.info("Creating JSON run report")
