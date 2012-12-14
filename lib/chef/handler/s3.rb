@@ -13,7 +13,7 @@ require 'aws-sdk'
 class Chef
   class Handler
     class S3 < ::Chef::Handler
-      VERSION = '0.1.1'
+      VERSION = '0.1.2'
 
       attr_reader :config
 
